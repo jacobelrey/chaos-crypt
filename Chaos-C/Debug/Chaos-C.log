@@ -1,0 +1,8 @@
+﻿  main.c
+C:\Users\Jacob\source\repos\chaos-crypt\Chaos-C\main.c(8,111): warning C4047: 'function': 'vector *' differs in levels of indirection from 'vector **'
+C:\Users\Jacob\source\repos\chaos-crypt\Chaos-C\main.c(8,105): warning C4024: 'mprod': different types for formal and actual parameter 1
+C:\Users\Jacob\source\repos\chaos-crypt\Chaos-C\main.c(37,20): warning C4047: 'function': 'vector **' differs in levels of indirection from 'vector (*)[3]'
+C:\Users\Jacob\source\repos\chaos-crypt\Chaos-C\main.c(37,13): warning C4024: 'initParams': different types for formal and actual parameter 1
+C:\Users\Jacob\source\repos\chaos-crypt\Chaos-C\main.c(40,23): warning C4047: 'function': 'vector **' differs in levels of indirection from 'vector (*)[3]'
+C:\Users\Jacob\source\repos\chaos-crypt\Chaos-C\main.c(40,16): warning C4024: 'heunsPlusOne': different types for formal and actual parameter 1
+  Chaos-C.vcxproj -> C:\Users\Jacob\source\repos\chaos-crypt\Chaos-C\Debug\Chaos-C.exe
