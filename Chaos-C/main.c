@@ -3,41 +3,41 @@
 
 #include"vector.h"
 
-void heunsPlusOne(vector* params[3], vector* current, int64_t stepSize) {
-	vector xvec = { current->x,0,0 };
-	*current = vsum(*current, vsum(*current, sprod(stepSize/2, vsum(*current, sprod(stepSize+1, vsum(mprod(params, *current), cprod(xvec, *current)))))));
+void heunsPlusOne(matrix* params, vector* current, float stepSize) {
+	vector xvec = { current->x,0.0,0.0 };
+	vector uxv = cprod(xvec, *current);
+	vector Ax = mprod(*params, *current);
+
+	*current = vsum(*current, sprod(stepSize / 2, vsum(*current, sprod(stepSize + 1, vsum(Ax, uxv)))));
+	
 }
 
-void initParams(vector* params[3], int64_t sigma, int64_t rho, int64_t beta) {
+matrix initParams(float sigma, float rho, float beta) {
 	vector v0 = {
 		-1*sigma,
 		rho,
-		(int64_t) 0
+		0.0
 	};
 	vector v1 = {
 		sigma,
-		(int64_t) -1,
-		(int64_t) 0
+		-1,
+		0
 	};
 
 	vector v2 = {
-		(int64_t) 0,
-		(int64_t) 0,
+		0,
+		0,
 		beta
 	};
-	*params[0] = v0;
-	*params[0] = v1;
-	*params[0] = v2;
+	return (matrix) { v0, v1, v2 };
 }
 
 
 int main(void) {
-	vector v = { 0,0,0 };
-	vector params[3] = {v,v,v};
-	initParams(&params, 10, 28, 3);
-	vector vec = { 1,1,1 };
-	for (int i = 0; i < 1000; i++) {
-		heunsPlusOne(&params, &vec, 1);
-		printf("x:%ld, y:%ld, z:%ld\n", (long)vec.x, (long)vec.y, (long)vec.z);
+	matrix params = initParams(10.0, 28.0, 8/3);
+	vector vec = { 1.0,1.0,1.0 };
+	for (int i = 0; i < 20000; i++) {
+		heunsPlusOne(&params, &vec, 0.0001);
+		printf("(%d) x:%.4F, y:%.4F, z:%.4F\n", i, vec.x, vec.y, vec.z);
 	}
 }

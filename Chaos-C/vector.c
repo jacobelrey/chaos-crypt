@@ -22,17 +22,17 @@ vector vsum(vector lvec, vector rvec) {
 	};
 }
 
-vector sprod(int64_t scalar, vector vec) {
+vector sprod(float scalar, vector vec) {
 	return (vector) {
-		scalar* vec.x,
-		scalar* vec.y,
-		scalar* vec.z,
+		vec.x * scalar,
+		vec.y * scalar,
+		vec.z * scalar,
 	};
 }
 
-vector mprod(vector matrix[3], vector vec) {
-	vector vx = sprod(vec.x, matrix[0]);
-	vector vy = sprod(vec.y, matrix[1]);
-	vector vz = sprod(vec.z, matrix[2]);
+vector mprod(matrix mat, vector vec) {
+	vector vx = sprod(vec.x, mat.v0);
+	vector vy = sprod(vec.y, mat.v1);
+	vector vz = sprod(vec.z, mat.v2);
 	return vsum(vsum(vx, vy), vz);
 }

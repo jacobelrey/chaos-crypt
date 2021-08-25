@@ -4,18 +4,24 @@
 #define VECTOR_H
 
 typedef struct vector {
-	int64_t x;
-	int64_t y;
-	int64_t z;
+	float x;
+	float y;
+	float z;
 } vector;
+
+typedef struct matrix {
+	vector v0;
+	vector v1;
+	vector v2;
+} matrix;
 
 vector cprod(vector lvec, vector rvec);
 
 int64_t dprod(vector lvec, vector rvec);
 
-vector mprod(vector matrix[3], vector vec);
+vector mprod(matrix mat, vector vec);
 
-vector sprod(int64_t scalar, vector vec);
+vector sprod(float scalar, vector vec);
 
 vector vsum(vector lvec, vector rvec);
 
