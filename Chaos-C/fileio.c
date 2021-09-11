@@ -1,8 +1,7 @@
 #include<stdio.h>
-#include<stdlib.h>
 #include<stdint.h>
-#include <ctype.h>
-#include <stdbool.h>
+
+
 
 size_t readString(char* string, size_t max_string_length)
 {
@@ -21,7 +20,7 @@ FILE* openInputFile(char* filename)
 {	
 	FILE* file = fopen(filename, "r");
 	if (file == NULL) {
-		printf("Input file can't be opened");
+		printf("Input file can't be opened\n");
 	}
 	return file;
 }
@@ -30,7 +29,7 @@ FILE* openOutputFile(char* filename)
 {
 	FILE* file = fopen(filename, "w");
 	if (file == NULL) {
-		printf("Output file can't be opened");
+		printf("Output file can't be opened\n");
 	}
 	return file;
 }
