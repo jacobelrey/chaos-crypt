@@ -23,6 +23,12 @@ int main(int argc, char* argv[]) {
         return -1;
     }
 
+    fseek(input, 0, SEEK_END);
+    size_t lengthOfFile = ftell(input);
+
+    numericSolve(input,output,lengthOfFile*8);
+    
+
     fclose(input);
 	fclose(output);
 	end = clock();
