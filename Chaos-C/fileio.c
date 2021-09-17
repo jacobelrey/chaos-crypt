@@ -18,7 +18,7 @@ size_t readString(char* string, size_t max_string_length)
 
 FILE* openInputFile(char* filename)
 {	
-	FILE* file = fopen(filename, "r");
+	FILE* file = fopen(filename, "rb");
 	if (file == NULL) {
 		printf("Input file can't be opened\n");
 	}

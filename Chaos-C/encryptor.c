@@ -25,13 +25,14 @@ int main(int argc, char* argv[]) {
 
     fseek(input, 0, SEEK_END);
     size_t lengthOfFile = ftell(input);
+    rewind(input);
 
-    numericSolve(input,output,lengthOfFile*8);
-    
+    numericSolve(input,output,lengthOfFile, false);
 
     fclose(input);
 	fclose(output);
+
 	end = clock();
     cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
-	printf("Program completed in %.4F seconds.", cpu_time_used);
+	printf("File encrypted in %.4F seconds.", cpu_time_used);
 }

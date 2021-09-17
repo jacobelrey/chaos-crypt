@@ -35,7 +35,7 @@ static void initParams(matrix* params, float rho, float sigma, float beta) {
 	params->v2=v2;
 }
 
-void numericSolve(FILE* input, FILE* output, size_t messageLength, bool isCoupled) {
+void numericSolve(FILE* input, FILE* output, size_t messageLength) {
 
 	vector vec = { 1.0,1.0,1.0 };
 	
@@ -46,30 +46,22 @@ void numericSolve(FILE* input, FILE* output, size_t messageLength, bool isCouple
 	
 	if(input==NULL) {
 		for (int i=0; i<messageLength; i++) {
-		heunsPlusOne(params, &vec, 1);
+		heunsPlusOne(params, &vec, 0.1);
 		fprintf(output, "%.4F,%.4F,%.4F\n", vec.x, vec.y, vec.z);
 		} 
-	} else if(isCoupled) {
-		for(int i=0; i<messageLength; i++){
-			fscanf(input, "%F\n", &(vec.x));
-			heunsPlusOne(params, &vec, 1);
-			fprintf(output, "%.4F,%.4F,%.4F\n", vec.x, vec.y, vec.z);
-		}
+
 	} else {
-			char drho,dsigma,dbeta;
-		for(int i=0; i<messageLength; i++){
-			drho = fgetc(input);
-			dsigma = fgetc(input);
-			dbeta = fgetc(input);
-			for (int j=0; j<8; j++) {
-				initParams(params,28+28*((drho >> j) & 1),10+10*((dsigma >> j) & 1),8/3+8/3*((dbeta >> j) & 1));
-				heunsPlusOne(params, &vec, 1);
-				fprintf(output, "%.4F\n", vec.x);
-			}
+			uint8_t bytestream[3] scramble;
 
+		for(int i=0; i<messageLength/3 + 3; i++){
 
-			
+			heunsPlusOne(params, &vec, 0.1);
 
+			bytestream[0] = fgetc(input) ^ vec.x;
+			bytestream[1] = fgetc(input) ^ vec.y;
+			bytestream[2] = fgetc(input) ^ vec.z;
+
+			fwrite(bytestream, 3, sizeof(input), output);
 		}
 	}
 }
