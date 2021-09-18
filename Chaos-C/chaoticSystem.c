@@ -4,7 +4,7 @@
 #include<stdbool.h>
 #include"vector.h"
 
-static void heunsPlusOne(matrix* params, vector* current, float stepSize) {
+void heunsPlusOne(matrix* params, vector* current, float stepSize) {
 	vector xvec = { current->x,0.0,0.0 };
 	vector uxv = cprod(xvec, *current);
 	vector Ax = mprod(*params, *current);
@@ -43,25 +43,51 @@ void numericSolve(FILE* input, FILE* output, size_t messageLength) {
 	matrix* params = &paramsVal;
 	
 	initParams(params,28,10,8/3);
+
+	uint8_t bytestream[3];
+
+	for(int i=0; i<messageLength/3-1; i++) {
+		
+		heunsPlusOne(params, &vec, 0.01);
+
+		bytestream[0] = fgetc(input);
+		bytestream[1] = fgetc(input);
+		bytestream[2] = fgetc(input);
+
+		bytestream[0] ^=  (int8_t) (vec.x * 10000) % UINT8_MAX;
+		bytestream[1] ^=  (int8_t) (vec.y * 10000) % UINT8_MAX;
+		bytestream[2] ^=  (int8_t) (vec.z * 10000) % UINT8_MAX;
+
+
+		printf("after mask%d\n", bytestream[0]);
+		fwrite(bytestream, 3, sizeof(int8_t), output);
+	}
 	
-	if(input==NULL) {
-		for (int i=0; i<messageLength; i++) {
-		heunsPlusOne(params, &vec, 0.1);
-		fprintf(output, "%.4F,%.4F,%.4F\n", vec.x, vec.y, vec.z);
-		} 
+	bytestream[0] = fgetc(input);
+	bytestream[1] = fgetc(input);
+	bytestream[2] = fgetc(input);
+	printf("Message Length %ld", messageLength);
 
+	if (bytestream[0] == EOF) {
+		return;
 	} else {
-			uint8_t bytestream[3] scramble;
-
-		for(int i=0; i<messageLength/3 + 3; i++){
-
-			heunsPlusOne(params, &vec, 0.1);
-
-			bytestream[0] = fgetc(input) ^ vec.x;
-			bytestream[1] = fgetc(input) ^ vec.y;
-			bytestream[2] = fgetc(input) ^ vec.z;
-
-			fwrite(bytestream, 3, sizeof(input), output);
+		heunsPlusOne(params, &vec, 0.01);
+		bytestream[0] ^=  (int8_t) (vec.x * 10000) % UINT8_MAX;
+		fwrite(&bytestream[0], 1, sizeof(uint8_t), output);
+		if(bytestream[1] == EOF) {
+			return;
+		} else {
+			heunsPlusOne(params, &vec, 0.01);
+			bytestream[1] ^=  (int8_t) (vec.y * 10000) % UINT8_MAX;
+			fwrite(&bytestream[1], 1, sizeof(uint8_t), output);
+			if(bytestream[2] == EOF) {
+				return;
+			} else {
+				heunsPlusOne(params, &vec, 0.01);
+				bytestream[2] ^=  (uint8_t) (vec.z * 10000) % UINT8_MAX;
+				fwrite(&bytestream[2], 1, sizeof(uint8_t), output);
+			}
 		}
 	}
+	printf("Message Length %ld", messageLength);
 }
