@@ -41,8 +41,13 @@ void numericSolve(FILE* input, FILE* output, size_t messageLength) {
 	
 	matrix paramsVal={vec,vec,vec};
 	matrix* params = &paramsVal;
-	
-	initParams(params,28,10,8/3);
+
+	float rho, sigma, beta;
+
+	printf("Enter Lorenz Parameters: (rho sigma beta)");
+    scanf("%f %f %f\n", &rho, &sigma, &beta);
+
+	initParams(params,rho,sigma,beta);
 
 	uint8_t bytestream[3];
 
