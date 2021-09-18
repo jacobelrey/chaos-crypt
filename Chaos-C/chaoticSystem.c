@@ -59,14 +59,12 @@ void numericSolve(FILE* input, FILE* output, size_t messageLength) {
 		bytestream[2] ^=  (int8_t) (vec.z * 10000) % UINT8_MAX;
 
 
-		printf("after mask%d\n", bytestream[0]);
 		fwrite(bytestream, 3, sizeof(int8_t), output);
 	}
 	
 	bytestream[0] = fgetc(input);
 	bytestream[1] = fgetc(input);
 	bytestream[2] = fgetc(input);
-	printf("Message Length %ld", messageLength);
 
 	if (bytestream[0] == EOF) {
 		return;
@@ -89,5 +87,4 @@ void numericSolve(FILE* input, FILE* output, size_t messageLength) {
 			}
 		}
 	}
-	printf("Message Length %ld", messageLength);
 }
