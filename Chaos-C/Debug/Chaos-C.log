@@ -1,3 +1,0 @@
-﻿  main.c
-C:\Users\Jacob\source\repos\chaos-crypt\Chaos-C\main.c(43,37): warning C4305: 'function': truncation from 'double' to 'float'
-  Chaos-C.vcxproj -> C:\Users\Jacob\source\repos\chaos-crypt\Chaos-C\Debug\Chaos-C.exe
