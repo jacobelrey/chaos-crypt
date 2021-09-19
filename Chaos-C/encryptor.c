@@ -18,6 +18,7 @@ int main(int argc, char* argv[]) {
 	printf("input: %s\n", argv[1]);
     printf("output: %s\n", argv[2]);
 
+
 	FILE* input = openInputFile(argv[1]);
 	FILE* output = openOutputFile(argv[2]);
 	
@@ -37,5 +38,6 @@ int main(int argc, char* argv[]) {
 
 	end = clock();
     cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
+    printf("%ld clock cycles were used, making bitrate %ld bytes/clock", (end-start), (end-start)/fileLength);
 	printf("File encrypted in %.4F seconds.\n", cpu_time_used);
 }
