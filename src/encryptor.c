@@ -38,6 +38,6 @@ int main(int argc, char* argv[]) {
 
 	end = clock();
     cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
-    printf("%ld clock cycles were used, making bitrate %.4F bytes/clock\n", (end-start), ((float)fileLength)/(end-start));
+    printf("%ld clock cycles were used, making bitrate %.4F cycles/byte\n", (end-start), ((float)(end-start)/fileLength));
 	printf("File encrypted in %.4F seconds.\n", cpu_time_used);
 }
