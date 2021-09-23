@@ -2,23 +2,16 @@
 
 #include "vector.h"
 
-vector cprod(vector lvec, vector rvec) {
-	return (vector) {
-		lvec.y*rvec.z- rvec.y * lvec.z,
-		lvec.z* rvec.x - rvec.z * lvec.x,
-		lvec.x* rvec.y - rvec.x * lvec.y
-	};
-}
-
 int64_t dprod(vector lvec, vector rvec) {
-	return lvec.x * lvec.x + lvec.y * lvec.y + lvec.z * lvec.z;
+	return lvec.x * rvec.x + lvec.y * rvec.y + lvec.z * rvec.z + lvec.w * rvec.w;
 }
 
 vector vsum(vector lvec, vector rvec) {
 	return (vector) {
 		lvec.x + rvec.x,
 		lvec.y + rvec.y,
-		lvec.z + rvec.z
+		lvec.z + rvec.z,
+		lvec.w + rvec.w,
 	};
 }
 
@@ -27,6 +20,7 @@ vector sprod(float scalar, vector vec) {
 		vec.x * scalar,
 		vec.y * scalar,
 		vec.z * scalar,
+		vec.w * scalar,
 	};
 }
 
@@ -34,5 +28,6 @@ vector mprod(matrix mat, vector vec) {
 	vector vx = sprod(vec.x, mat.v0);
 	vector vy = sprod(vec.y, mat.v1);
 	vector vz = sprod(vec.z, mat.v2);
-	return vsum(vsum(vx, vy), vz);
+	vector vw = sprod(vec.w, mat.v3);
+	return vsum(vsum(vsum(vx, vy), vz), vw);
 }

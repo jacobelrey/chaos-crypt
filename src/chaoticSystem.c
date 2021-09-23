@@ -5,72 +5,110 @@
 #include"vector.h"
 
 void heunsPlusOne(matrix* params, vector* current, float stepSize) {
-	vector xvec = { current->x,0.0,0.0 };
-	vector uxv = cprod(xvec, *current);
+
+	vector uxv = { 0, -1 * current->x * current->z, current->x * current->y, 0 };
 	vector Ax = mprod(*params, *current);
 
 	*current = vsum(*current, sprod(stepSize / 2, vsum(*current, sprod(stepSize + 1, vsum(Ax, uxv)))));
 	
 }
 
-static void initParams(matrix* params, float rho, float sigma, float beta) {
+static void initParams(matrix* params, float rho, float sigma, float beta, float gamma) {
 	vector v0 = {
 		-1*sigma,
 		rho,
-		0.0
+		0.0,
+		-1
 	};
 	vector v1 = {
 		sigma,
 		-1,
+		0,
 		0
 	};
 
 	vector v2 = {
 		0,
 		0,
-		-1*beta
+		-1*beta,
+		0
 	};
+	vector v3 = {
+		gamma,
+		0,
+		0,
+		sigma
+	};
+
 	params->v0=v0;
 	params->v1=v1;
 	params->v2=v2;
+	params->v3=v3;
 }
 
 void numericSolve(FILE* input, FILE* output, size_t messageLength) {
 
-	vector vec = { 1.0,1.0,1.0 };
+	vector vec = { 1.0,1.0,1.0, 1.0};
 	
-	matrix paramsVal={vec,vec,vec};
+	matrix paramsVal={vec,vec,vec,vec};
 	matrix* params = &paramsVal;
 
-	float rho, sigma, beta;
+	float rho, sigma, beta, gamma;
 
-	printf("Enter Lorenz Parameters: (rho sigma beta)");
-    scanf("%f %f %f\n", &rho, &sigma, &beta);
+	printf("Enter Lorenz Parameters: (rho sigma beta gamma)");
+    scanf("%f %f %f %f\n", &rho, &sigma, &beta, &gamma);
 
-	initParams(params,rho,sigma,beta);
+	initParams(params, rho,sigma,beta, gamma);
 
-	uint8_t bytestream[3];
+	uint8_t bytestream[4];
 
-	for(int i=0; i<messageLength/3-1; i++) {
+	for(int i=0; i<messageLength/16; i++) {
 		
-		heunsPlusOne(params, &vec, 0.01);
+		heunsPlusOne(params, &vec, 0.001);
 
 		bytestream[0] = fgetc(input);
 		bytestream[1] = fgetc(input);
 		bytestream[2] = fgetc(input);
+		bytestream[3] = fgetc(input);
 
-		bytestream[0] ^=  (int8_t) (vec.x * 10000) % UINT8_MAX;
-		bytestream[1] ^=  (int8_t) (vec.y * 10000) % UINT8_MAX;
-		bytestream[2] ^=  (int8_t) (vec.z * 10000) % UINT8_MAX;
+		*(int32_t*) bytestream ^= *(int32_t*) &vec.x;
+		fwrite(bytestream, 1, sizeof(int32_t), output);
 
+		bytestream[0] = fgetc(input);
+		bytestream[1] = fgetc(input);
+		bytestream[2] = fgetc(input);
+		bytestream[3] = fgetc(input);
 
-		fwrite(bytestream, 3, sizeof(int8_t), output);
+		*(int32_t*) bytestream ^= *(int32_t*) &vec.y;
+		fwrite(bytestream, 1, sizeof(int32_t), output);
+
+		bytestream[0] = fgetc(input);
+		bytestream[1] = fgetc(input);
+		bytestream[2] = fgetc(input);
+		bytestream[3] = fgetc(input);
+
+		*(int32_t*) bytestream ^= *(int32_t*) &vec.z;
+		fwrite(bytestream, 1, sizeof(int32_t), output);
+
+		bytestream[0] = fgetc(input);
+		bytestream[1] = fgetc(input);
+		bytestream[2] = fgetc(input);
+		bytestream[3] = fgetc(input);
+
+		*(int32_t*) bytestream ^= *(int32_t*) &vec.w;
+		fwrite(bytestream, 1, sizeof(int32_t), output);
 	}
-	
+
+
+	/*
+
 	bytestream[0] = fgetc(input);
 	bytestream[1] = fgetc(input);
 	bytestream[2] = fgetc(input);
+	bytestream[3] = fgetc(input);
 
+
+	
 	if (bytestream[0] == EOF) {
 		return;
 	} else {
@@ -92,4 +130,5 @@ void numericSolve(FILE* input, FILE* output, size_t messageLength) {
 			}
 		}
 	}
+	*/
 }

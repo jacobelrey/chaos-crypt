@@ -7,12 +7,14 @@ typedef struct vector {
 	float x;
 	float y;
 	float z;
+	float w;
 } vector;
 
 typedef struct matrix {
 	vector v0;
 	vector v1;
 	vector v2;
+	vector v3;
 } matrix;
 
 vector cprod(vector lvec, vector rvec);
