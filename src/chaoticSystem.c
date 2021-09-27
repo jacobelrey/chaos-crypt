@@ -99,36 +99,4 @@ void numericSolve(FILE* input, FILE* output, size_t messageLength) {
 		fwrite(bytestream, 1, sizeof(int32_t), output);
 	}
 
-
-	/*
-
-	bytestream[0] = fgetc(input);
-	bytestream[1] = fgetc(input);
-	bytestream[2] = fgetc(input);
-	bytestream[3] = fgetc(input);
-
-
-	
-	if (bytestream[0] == EOF) {
-		return;
-	} else {
-		heunsPlusOne(params, &vec, 0.01);
-		bytestream[0] ^=  (int8_t) (vec.x * 10000) % UINT8_MAX;
-		fwrite(&bytestream[0], 1, sizeof(uint8_t), output);
-		if(bytestream[1] == EOF) {
-			return;
-		} else {
-			heunsPlusOne(params, &vec, 0.01);
-			bytestream[1] ^=  (int8_t) (vec.y * 10000) % UINT8_MAX;
-			fwrite(&bytestream[1], 1, sizeof(uint8_t), output);
-			if(bytestream[2] == EOF) {
-				return;
-			} else {
-				heunsPlusOne(params, &vec, 0.01);
-				bytestream[2] ^=  (uint8_t) (vec.z * 10000) % UINT8_MAX;
-				fwrite(&bytestream[2], 1, sizeof(uint8_t), output);
-			}
-		}
-	}
-	*/
 }
