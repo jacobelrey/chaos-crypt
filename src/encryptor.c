@@ -2,7 +2,7 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<time.h>
-
+#include<string.h>
 
 #include"vector.h"
 #include"fileio.h"
@@ -15,13 +15,22 @@ int main(int argc, char* argv[]) {
 	
 	start = clock();
 
+    uint32_t key[8];
+
+    for (int i = 0; i<8; i++) {
+        char* chunk = NULL;
+        strncpy(chunk, argv[3]+i, 4);
+        key[i] = atoi(chunk);
+    }
+
 	printf("input: %s\n", argv[1]);
     printf("output: %s\n", argv[2]);
-
+    printf("key: %s\n", argv[3]);
 
 	FILE* input = openInputFile(argv[1]);
 	FILE* output = openOutputFile(argv[2]);
-	
+	FILE* key = openInputFile(argv[3]);
+
     if(input == NULL) {
         printf("input File not found.Exiting.\n");
         return -1;
