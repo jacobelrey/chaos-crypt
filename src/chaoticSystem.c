@@ -46,7 +46,7 @@ static void initParams(matrix* params, float rho, float sigma, float beta, float
 	params->v3=v3;
 }
 
-void numericSolve(FILE* input, FILE* output, size_t messageLength, float init[]) {
+void numericSolve(FILE* input, FILE* output, size_t messageLength, float init[], uint32_t windUp) {
 
 	vector vec = { init[0],init[1],init[2], init[3] };
 
@@ -54,7 +54,6 @@ void numericSolve(FILE* input, FILE* output, size_t messageLength, float init[])
 	float sigma = init[5];
 	float beta = init[6];
 	float gamma = init[7];
-	float epsilon = init[7];
 
 	uint8_t bytestream[4];
 
@@ -63,7 +62,7 @@ void numericSolve(FILE* input, FILE* output, size_t messageLength, float init[])
 	matrix* params = &paramsVal;
 
 	initParams(params,rho,sigma,beta,gamma);
-	for(int i = 0; i<(uint32_t) epsilon +  128; i++){
+	for(int i = 0; i<windUp +  128; i++){
 		heunsPlusOne(params, &vec, 0.001);
 	}
 	for(int i=0; i<messageLength/16; i++) {

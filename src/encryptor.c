@@ -15,12 +15,13 @@ int main(int argc, char* argv[]) {
 	
 	start = clock();
 
-    float* params = calloc(sizeof(float), 9);
+    float* params = calloc(sizeof(float), 8);
+    uint32_t windUp;
 
 	printf("input: %s\n", argv[1]);
     printf("output: %s\n", argv[2]);
     printf("Enter Encryption parameters (x0, y0, z0, w0, σ ρ β γ ε)");
-    scanf("%f %f %f %f %f %f %f %f %f", params, params+1, params+2, params+3, params+4, params+5, params+6, params+7, params+8);
+    scanf("%f %f %f %f %f %f %f %f %d", params, params+1, params+2, params+3, params+4, params+5, params+6, params+7, &windUp);
 
 	FILE* input = openInputFile(argv[1]);
 	FILE* output = openOutputFile(argv[2]);
@@ -34,7 +35,7 @@ int main(int argc, char* argv[]) {
     size_t fileLength = ftell(input);
     rewind(input);
 
-    numericSolve(input,output,fileLength, params);
+    numericSolve(input,output,fileLength, params, windUp);
 
     fclose(input);
 	fclose(output);
