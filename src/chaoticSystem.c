@@ -63,11 +63,11 @@ void numericSolve(FILE* input, FILE* output, size_t messageLength, float init[],
 
 	initParams(params,rho,sigma,beta,gamma);
 	for(int i = 0; i<windUp +  128; i++){
-		heunsPlusOne(params, &vec, 0.001);
+		heunsPlusOne(params, &vec, 10);
 	}
 	for(int i=0; i<messageLength/16; i++) {
 		
-		heunsPlusOne(params, &vec, 0.001);
+		heunsPlusOne(params, &vec, 10);
 
 		bytestream[0] = fgetc(input);
 		bytestream[1] = fgetc(input);

@@ -8,6 +8,6 @@
 #ifndef CHAOS_H
 #define CHAOS_H
 
-void numericSolve(FILE* input, FILE* output, size_t messageLength, bool isCoupled);
+void numericSolve(FILE* input, FILE* output, size_t messageLength, float init[], uint32_t windUp);
 
 #endif //CHAOS_H
