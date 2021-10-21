@@ -9,7 +9,10 @@ void heunsPlusOne(matrix* params, vector* current, float stepSize) {
 	vector uxv = { 0, -1 * current->x * current->z, current->x * current->y, 0 };
 	vector Ax = mprod(*params, *current);
 
+	
+
 	*current = vsum(*current, sprod(stepSize / 2, vsum(*current, sprod(stepSize + 1, vsum(Ax, uxv)))));
+	*current = sprod(1/10, *current):
 }
 
 static void initParams(matrix* params, float rho, float sigma, float beta, float gamma) {

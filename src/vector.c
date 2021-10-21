@@ -1,5 +1,5 @@
 #include<stdint.h>
-
+#include<float.h>
 #include "vector.h"
 
 int64_t dprod(vector lvec, vector rvec) {
@@ -17,7 +17,7 @@ vector vsum(vector lvec, vector rvec) {
 
 vector sprod(float scalar, vector vec) {
 	return (vector) {
-		vec.x * scalar,
+		vec.x = (vec.x * scalar == FP_NAN | vec.x * scalar == FP_INFINITE) ? (DBL_MAX-vec.x) : 
 		vec.y * scalar,
 		vec.z * scalar,
 		vec.w * scalar,
