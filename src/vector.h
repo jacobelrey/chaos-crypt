@@ -4,10 +4,10 @@
 #define VECTOR_H
 
 typedef struct vector {
-	float x;
-	float y;
-	float z;
-	float w;
+	long double x;
+	long double y;
+	long double z;
+	long double w;
 } vector;
 
 typedef struct matrix {

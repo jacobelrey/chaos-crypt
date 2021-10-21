@@ -10,7 +10,6 @@ void heunsPlusOne(matrix* params, vector* current, float stepSize) {
 	vector Ax = mprod(*params, *current);
 
 	*current = vsum(*current, sprod(stepSize / 2, vsum(*current, sprod(stepSize + 1, vsum(Ax, uxv)))));
-	
 }
 
 static void initParams(matrix* params, float rho, float sigma, float beta, float gamma) {
@@ -61,14 +60,19 @@ void numericSolve(FILE* input, FILE* output, size_t messageLength, float init[],
 	matrix paramsVal={vec,vec,vec,vec};
 	matrix* params = &paramsVal;
 
+	FILE* chaos = fopen("./chaos.csv", "w");
+
 	initParams(params,rho,sigma,beta,gamma);
-	for(int i = 0; i<windUp +  128; i++){
-		heunsPlusOne(params, &vec, 10);
+	for(int i = 0; i<windUp + 1024; i++){
+		heunsPlusOne(params, &vec, 0.0000000001);
 	}
 	for(int i=0; i<messageLength/16; i++) {
 		
-		heunsPlusOne(params, &vec, 10);
-
+		heunsPlusOne(params, &vec, 0.0000000001);
+		fprintf(chaos, "%Lf,", vec.x);
+		fprintf(chaos, "%Lf,", vec.y);
+		fprintf(chaos, "%Lf\n", vec.z);
+		//printf("(%Lf, %Lf, %Lf)\n", vec.x, vec.y, vec.z);
 		bytestream[0] = fgetc(input);
 		bytestream[1] = fgetc(input);
 		bytestream[2] = fgetc(input);
