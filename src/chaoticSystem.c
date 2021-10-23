@@ -60,19 +60,12 @@ void numericSolve(FILE* input, FILE* output, size_t messageLength, float init[],
 	matrix paramsVal={vec,vec,vec,vec};
 	matrix* params = &paramsVal;
 
-	FILE* chaos = fopen("./chaos.csv", "w");
-
 	initParams(params,rho,sigma,beta,gamma);
 	for(int i = 0; i<windUp + 1024; i++){
 		heunsPlusOne(params, &vec, 1);
 	}
 	for(int i=0; i<messageLength/16; i++) {
 		
-		heunsPlusOne(params, &vec, 1);
-		fprintf(chaos, "%Lf,", vec.x);
-		fprintf(chaos, "%Lf,", vec.y);
-		fprintf(chaos, "%Lf\n", vec.z);
-		//printf("(%Lf, %Lf, %Lf)\n", vec.x, vec.y, vec.z);
 		bytestream[0] = fgetc(input);
 		bytestream[1] = fgetc(input);
 		bytestream[2] = fgetc(input);
