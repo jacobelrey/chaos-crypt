@@ -9,10 +9,7 @@ void heunsPlusOne(matrix* params, vector* current, float stepSize) {
 	vector uxv = { 0, -1 * current->x * current->z, current->x * current->y, 0 };
 	vector Ax = mprod(*params, *current);
 
-	
-
 	*current = vsum(*current, sprod(stepSize / 2, vsum(*current, sprod(stepSize + 1, vsum(Ax, uxv)))));
-	*current = sprod(1/10, *current):
 }
 
 static void initParams(matrix* params, float rho, float sigma, float beta, float gamma) {
@@ -67,11 +64,11 @@ void numericSolve(FILE* input, FILE* output, size_t messageLength, float init[],
 
 	initParams(params,rho,sigma,beta,gamma);
 	for(int i = 0; i<windUp + 1024; i++){
-		heunsPlusOne(params, &vec, 0.0000000001);
+		heunsPlusOne(params, &vec, 1);
 	}
 	for(int i=0; i<messageLength/16; i++) {
 		
-		heunsPlusOne(params, &vec, 0.0000000001);
+		heunsPlusOne(params, &vec, 1);
 		fprintf(chaos, "%Lf,", vec.x);
 		fprintf(chaos, "%Lf,", vec.y);
 		fprintf(chaos, "%Lf\n", vec.z);

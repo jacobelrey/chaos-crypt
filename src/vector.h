@@ -27,4 +27,6 @@ vector sprod(float scalar, vector vec);
 
 vector vsum(vector lvec, vector rvec);
 
+void vector_print(vector* vec);
+
 #endif // !VECTOR_H
