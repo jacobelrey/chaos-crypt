@@ -10,4 +10,6 @@
 
 void numericSolve(FILE* input, FILE* output, size_t messageLength, float init[], uint32_t windUp);
 
+void GenNumeric(FILE* input, FILE* output, size_t messageLength, float init[], uint32_t windUp);
+
 #endif //CHAOS_H

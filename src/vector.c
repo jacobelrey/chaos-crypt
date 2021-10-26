@@ -10,19 +10,19 @@ int64_t dprod(vector lvec, vector rvec) {
 
 vector vsum(vector lvec, vector rvec) {
 	return (vector) {
-		!isfinite(lvec.x + rvec.x) ? (DBL_MAX-lvec.x) : lvec.x + rvec.x,
-		!isfinite(lvec.y + rvec.y) ? (DBL_MAX-lvec.y) : lvec.y + rvec.y,
-		!isfinite(lvec.z + rvec.z) ? (DBL_MAX-lvec.y): lvec.z + rvec.z,
-		!isfinite(lvec.w + rvec.w) ? (DBL_MAX-lvec.w) : lvec.w + rvec.w,
+		fmod(lvec.x, FLT_MAX) + fmod(rvec.x, FLT_MAX),
+		fmod(lvec.y, FLT_MAX) + fmod(rvec.y, FLT_MAX),
+		fmod(lvec.z, FLT_MAX) + fmod(rvec.z, FLT_MAX),
+		fmod(lvec.w, FLT_MAX) + fmod(rvec.w, FLT_MAX),
 	};
 }
 
 vector sprod(float scalar, vector vec) {
 	return (vector) {
-		!isfinite(vec.x * scalar) ? (DBL_MAX-vec.x) : vec.x * scalar,
-		!isfinite(vec.y * scalar) ? (DBL_MAX-vec.y) : vec.y * scalar,
-		!isfinite(vec.z * scalar) ? (DBL_MAX-vec.y) : vec.z * scalar,
-		!isfinite(vec.w * scalar) ? (DBL_MAX-vec.w) : vec.w * scalar,
+		!isfinite(vec.x * scalar) ? fmod(vec.x, FLT_MAX) * scalar : vec.x * scalar,
+		!isfinite(vec.y * scalar) ? fmod(vec.y, FLT_MAX) * scalar : vec.y * scalar,
+		!isfinite(vec.z * scalar) ? fmod(vec.y, FLT_MAX) * scalar : vec.z * scalar,
+		!isfinite(vec.w * scalar) ? fmod(vec.w, FLT_MAX) * scalar : vec.w * scalar,
 	};
 }
 
@@ -35,5 +35,5 @@ vector mprod(matrix mat, vector vec) {
 }
 
 void vector_print(vector* vec) {
-	printf("(%Lf, %Lf, %Lf)\n", vec->x, vec->y, vec->z);
+	printf("(%F, %F, %F)\n", vec->x, vec->y, vec->z);
 }
