@@ -12,4 +12,5 @@ void numericSolve(FILE* input, FILE* output, size_t messageLength, float init[],
 
 void GenNumeric(FILE* input, FILE* output, size_t messageLength, float init[], uint32_t windUp);
 
+vector LorenzStenflo(matrix* params, vector* current);
 #endif //CHAOS_H

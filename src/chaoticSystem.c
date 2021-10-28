@@ -4,7 +4,7 @@
 #include<stdbool.h>
 #include<math.h>
 #include"vector.h"
-
+#include"chaoticSystem.h"
 
 /*
 It uses heun's method to solve the Lorenz-Stenflo Chaotic System.
@@ -13,13 +13,18 @@ this vector is unpredictable unless the initial parameters are known, making the
 for generating a pseudorandom mask
 */
 void heunsPlusOne(matrix* params, vector* current, float stepSize) {
-
-	vector uxv = { 0, -1 * current->x * current->z, current->x * current->y, 0 };
-	vector Ax = mprod(*params, *current);
-
-	*current = vsum(*current, sprod(stepSize / 2, vsum(*current, sprod(stepSize + 1, vsum(Ax, uxv)))));
+	vector xi = *current;
+	vector fxi = LorenzStenflo(params, &xi);
+	vector xiTilde = vsum(xi, sprod(stepSize, fxi));
+	*current = vsum(xi, sprod(stepSize / 2, vsum(fxi, LorenzStenflo(params, &xiTilde))));
 	*current = sprod(0.5, *current);
 }
+
+vector LorenzStenflo(matrix* params, vector* current) {
+	vector uxv = { 0, -1 * current->x * current->z, current->x * current->y, 0 };
+	return vsum(mprod(*params, *current), uxv);
+}
+
 //Initialises parameter matrix, used in the heunsPlusOne function to step to generate the numerical solution at the proceeding t value
 static void initParams(matrix* params, float rho, float sigma, float beta, float gamma) {
 	vector v0 = {
@@ -64,7 +69,7 @@ void GenNumeric(FILE* input, FILE* output, size_t messageLength, float init[], u
 
 	initParams(params,40,10,8/3,50);
 	for(int i = 0; i<messageLength; i++){
-		heunsPlusOne(params, &vec, 1);
+		heunsPlusOne(params, &vec, 0.1);
 		fprintf(output, "%F,", vec.x);
 		fprintf(output, "%F,", vec.y);
 		fprintf(output, "%F,", vec.x);
