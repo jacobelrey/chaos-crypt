@@ -7,17 +7,16 @@
 #include"chaoticSystem.h"
 
 /*
-It uses heun's method to solve the Lorenz-Stenflo Chaotic System.
+It uses Eulers's method to solve the Lorenz-Stenflo Chaotic System.
 Each time this function is called, it generates the i+1th chaotic vector
 this vector is unpredictable unless the initial parameters are known, making them perfect
 for generating a pseudorandom mask
 */
-void heunsPlusOne(matrix* params, vector* current, float stepSize) {
+void eulerPlusOne(matrix* params, vector* current, float stepSize) {
 	vector xi = *current;
 	vector fxi = LorenzStenflo(params, &xi);
-	vector xiTilde = vsum(xi, sprod(stepSize, fxi));
-	*current = vsum(xi, sprod(stepSize / 2, vsum(fxi, LorenzStenflo(params, &xiTilde))));
-	*current = sprod(0.5, *current);
+	*current = vsum(xi, sprod(stepSize, fxi));
+
 }
 
 vector LorenzStenflo(matrix* params, vector* current) {
@@ -25,7 +24,7 @@ vector LorenzStenflo(matrix* params, vector* current) {
 	return vsum(mprod(*params, *current), uxv);
 }
 
-//Initialises parameter matrix, used in the heunsPlusOne function to step to generate the numerical solution at the proceeding t value
+//Initialises parameter matrix, used in the eulerPlusOne function to step to generate the numerical solution at the proceeding t value
 static void initParams(matrix* params, float rho, float sigma, float beta, float gamma) {
 	vector v0 = {
 		-1*sigma,
@@ -69,7 +68,7 @@ void GenNumeric(FILE* input, FILE* output, size_t messageLength, float init[], u
 
 	initParams(params,40,10,8/3,50);
 	for(int i = 0; i<messageLength; i++){
-		heunsPlusOne(params, &vec, 0.1);
+		eulerPlusOne(params, &vec, 0.1);
 		fprintf(output, "%F,", vec.x);
 		fprintf(output, "%F,", vec.y);
 		fprintf(output, "%F,", vec.x);
@@ -97,10 +96,10 @@ void numericSolve(FILE* input, FILE* output, size_t messageLength, float init[],
 
 	initParams(params,rho,sigma,beta,gamma);
 	for(int i = 0; i<windUp + 1024; i++){
-		heunsPlusOne(params, &vec, 0.1);
+		eulerPlusOne(params, &vec, 0.1);
 	}
 	for(int i=0; i<messageLength/16; i++) {
-		heunsPlusOne(params, &vec, 0.1);
+		eulerPlusOne(params, &vec, 0.1);
 		
 		bytestream[0] = fgetc(input);
 		bytestream[1] = fgetc(input);
